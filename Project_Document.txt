@@ -1,0 +1,32 @@
+Requirement Understanding:
+-----------------------------
+We need to design, containerize, and deploy a multi-tier architecture on Kubernetes involving one microservice and one database.
+
+The system should simulate a simple real-world setup where the service tier fetches data from the database tier via an exposed API.
+
+Build and push application docker images to Docker hub
+
+Deploy the application on the Kubernetes cluster
+
+On API/Application invocation, fetches data from the database tier.
+
+Solution Overview:
+----------------------------
+Service tier — Spring Boot REST API (product-service) — fetches rows from Postgres over JDBC and exposes them at /api/products and /api/products/{id}. Stateless, runs 2 replicas behind a Service.
+Database tier — PostgreSQL, provided the sample product data which is loaded on first boot via an init script, backed by a PersistentVolumeClaim so data survives pod restarts.
+The two tiers never talk by IP address — the app connects to jdbc:postgresql://postgres-service:5432/productdb, and Kubernetes' internal DNS resolves postgres-service to whichever pod is currently running Postgres.
+
+
+Resources Used:
+-----------------------------
+Created VM on GCP 
+Installed docker on the created VM and build and push the image of the application
+Created clusters on GCP
+Deployed the application on the cluster.
+
+
+
+
+
+
+

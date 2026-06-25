@@ -1,0 +1,36 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: product-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/productdb}
+    username: ${SPRING_DATASOURCE_USERNAME:produser}
+    password: ${SPRING_DATASOURCE_PASSWORD:prodpass123}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      # validate (not create/update) on purpose: the database tier owns the schema
+      # via init.sql, the service tier only validates it matches the entity model.
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    open-in-view: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    readinessstate:
+      enabled: true
+    livenessstate:
+      enabled: true
